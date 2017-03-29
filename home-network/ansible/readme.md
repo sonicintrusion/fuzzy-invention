@@ -1,8 +1,14 @@
+# Sets up home network infrastructre
+
+## Reqs
+
 1. Must copy the authorized_keys file into place
 2. Hostname must be set manually (for now)
 3. NTP server must be built first
 4. DHCP server needs to be built before the other regular servers
 5. DHCP server must have static IP address
+
+## Current status
 
 Roles working:
 - bastion (ssh)
