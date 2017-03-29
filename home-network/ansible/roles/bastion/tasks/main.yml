@@ -10,3 +10,18 @@
     - ".ssh/*"
   become: yes
   become_method: sudo
+
+- name: install mosh
+  apt:
+    name: mosh
+    state: present
+  update_cache: yes
+
+- name: update firewall for mosh
+  lineinfile:
+    path: /etc/rc.local
+    line: "iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT"
+    insertbefore: "exit 0"
+
+- name: apply settings from rc.local
+  command: "source /etc/rc.local"

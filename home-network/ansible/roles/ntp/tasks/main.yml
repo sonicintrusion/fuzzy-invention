@@ -18,10 +18,15 @@
     - restart ntp
 
 - name: set firewall rules
-  command: {{ items }}
-  with_items:
-    - "iptables -A INPUT -p udp --dport 123 -j ACCEPT"
-    - "iptables -A OUTPUT -p udp --sport 123 -j ACCEPT"
+  blockinfile:
+    path: /etc/rc.local
+    block: |
+      iptables -A INPUT -p udp --dport 123 -j ACCEPT
+      iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
+    insertbefore: "exit 0"
+
+- name: call new rc.local file
+  command: "source /etc/rc.local"
 
 - name: start ntp service
   service: 

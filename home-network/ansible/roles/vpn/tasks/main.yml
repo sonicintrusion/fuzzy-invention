@@ -37,9 +37,6 @@
       - lsof
     update_cache: yes
 
-- name: configure firewall
-  command: "iptables —-table nat —-append POSTROUTING —-jump MASQUERADE"
-
 - name: configure sysctl.conf
   blockinfile: 
     path: /etc/sysctl.conf
@@ -56,7 +53,7 @@
     block: |
       for vpn in /proc/sys/net/ipv4/conf/*; do echo 0 > $vpn/accept_redirects; echo 0 > $vpn/send_redirects; done
       iptables --table nat --append POSTROUTING --jump MASQUERADE
-    
+
     insertbefore: "exit 0"
     backup: yes
     
