@@ -1,0 +1,30 @@
+---
+- name: install ntp
+  apt: 
+    name: ntp
+    state: present
+    update_cache: yes
+
+- name: update ntp.conf
+  copy:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+  notify:
+    - restart ntp
+
+- name: set firewall rules
+  command: {{ items }}
+  with_items:
+    - "iptables -A INPUT -p udp --dport 123 -j ACCEPT"
+    - "iptables -A OUTPUT -p udp --sport 123 -j ACCEPT"
+
+- name: start ntp service
+  service: 
+    name: ntpd
+    state: started
+    enabled: true

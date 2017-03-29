@@ -1,0 +1,8 @@
+[ariel]
+{{ ipaddr.ariel }} ansible_ssh_user=pi ansible_ssh_private_key_file=.ssh/highview_internal
+
+[rapunzel]
+{{ ipaddr.rapunzel }} ansible_ssh_user=pi ansible_ssh_private_key_file=.ssh/highview_internal
+
+[tinkerbell]
+{{ ipaddr.tinkerbell }} ansible_ssh_user=pi ansible_ssh_private_key_file=.ssh/highview_internal

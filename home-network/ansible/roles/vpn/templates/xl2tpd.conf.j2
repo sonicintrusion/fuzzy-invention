@@ -1,0 +1,14 @@
+[global]
+ipsec saref = yes
+listen-addr = {{ alias.vpn }}
+[lns default]
+ip range = 192.168.1.200-192.168.1.250
+local ip = {{ alias.vpn }}
+assign ip = yes
+require chap = yes
+refuse pap = yes
+require authentication = yes
+name = linkVPN
+ppp debug = yes
+pppoptfile = /etc/ppp/options.xl2tpd
+length bit = yes

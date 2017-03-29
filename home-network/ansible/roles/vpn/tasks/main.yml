@@ -1,0 +1,123 @@
+---
+- include_vars: secrets.yml
+
+- name: apply static ip address
+  template:
+    src: dhcpcd.conf.j2
+    dest: /etc/dhcpcd.conf
+    owner: root
+    group: netdev
+    mode: 0664
+    backup: yes
+    force: yes
+
+- name: reboot to enforce interface configuration
+  command: reboot
+  async: 0
+  poll: 0
+
+- name: wait for server to come back online
+  local_action: 
+    - wait_for:
+        host: {{ ansible_ssh_host }}
+        state: started
+        port: 22
+        delay: 30
+        timeout: 300
+        connect_timeout: 15
+
+- name: install vpn software
+  apt:
+    name: {{ items }}
+    state: present
+    with_items:
+      - openswan
+      - xl2tpd
+      - ppp
+      - lsof
+    update_cache: yes
+
+- name: configure firewall
+  command: "iptables —-table nat —-append POSTROUTING —-jump MASQUERADE"
+
+- name: configure sysctl.conf
+  blockinfile: 
+    path: /etc/sysctl.conf
+    block: |
+      net.ipv4.ip_forward = 1
+      net.ipv4.conf.all.accept_redirects = 0
+      net.ipv4.conf.all.send_redirects = 0
+    insertafter: EOF
+    backup: yes
+
+- name: add configuration change to rc.local_action
+  blockinfile:
+    path: /etc/rc.local
+    block: |
+      for vpn in /proc/sys/net/ipv4/conf/*; do echo 0 > $vpn/accept_redirects; echo 0 > $vpn/send_redirects; done
+      iptables --table nat --append POSTROUTING --jump MASQUERADE
+    
+    insertbefore: "exit 0"
+    backup: yes
+    
+- name: configure redirects
+  command: {{ items }}
+  with_items:
+   - "source /etc/rc.local"
+   - "sysctl -p"
+
+- name: reconfigure ipsec.conf
+  template:
+    src: ipsec.conf.j2
+    dest : /etc/ipsec.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+
+- name: setup ipsec secrets
+  lineinfile:
+    path: /etc/ipsec.secrets
+    line: '{{ alias.vpn }} %any : PSK "{{ supersecretkey }}"'
+    insertafter: EOF
+
+- name: configure xl2tpd.conf
+  template:
+    src: xl2tpd.conf.j2
+    dest: /etc/xl2tpd/xl2tpd.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+
+- name: configure options.xl2tpd
+  template:
+    src: options.xl2tpd.j2
+    dest: /etc/ppp/options.xl2tpd
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+
+- name: configure chap-secrets
+  lineinfile:
+    path: /etc/ppp/chap-secrets
+    line: '{{ vpn.user }} * {{ vpn.pass }}  *'
+    insertafter: EOF
+
+- name: configure auto-start on boot
+  command: {{ items }}
+  with_items:
+    - "update-rc.d -f ipsec remove""
+    - "update-rc.d ipsec defaults"
+
+- name: restart services
+  service:
+    name: {{ items }}
+    state: restarted
+  with_items:
+    - xl2tpd
+    - ipsec

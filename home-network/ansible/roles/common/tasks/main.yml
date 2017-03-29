@@ -1,0 +1,40 @@
+---
+- name: Set timezone
+  timezone:
+    name: Europe/London
+
+- name: install ntp
+  apt: 
+    name: {{ items }}
+    state: present
+    with_items:
+      - ntp
+      - ntpdate
+    update_cache: yes
+
+- name: configure ntp settings
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+    notify:
+      - restart ntp
+
+- name: set firewall rules
+  command: {{ items }}
+  with_items:
+    - "iptables -A OUTPUT -p udp --dport 123 -j ACCEPT"
+    - "iptables -A INPUT -p udp --sport 123 -j ACCEPT"
+
+- name: stop ntp service
+  service:
+    name: ntpd
+    state: stopped
+
+- name: set time
+  command: ntpdate {{ alias.ntp }}
+
+- name: start ntp service
+  service:
+    name: ntpd
+    state: started
+

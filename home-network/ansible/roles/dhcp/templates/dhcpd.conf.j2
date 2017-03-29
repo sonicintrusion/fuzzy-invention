@@ -1,0 +1,65 @@
+ddns-update-style none;
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    authoritative;
+    get-lease-hostnames on;
+    use-host-decl-names on;
+    option domain-name "home";
+    option domain-name-servers {{ alias.adblock }}, {{ alias.dns }}, {{ alias.router }};
+    option routers {{ alias.router }};
+    option ntp-servers {{ alias.ntp }}
+    option netbios-name-servers {{ alias.dns }}
+    range dynamic-bootp {{ dhcp_range.begin }} {{ dhcp_range.end }};
+    default-lease-time 14400;
+    max-lease-time 14400;
+
+    host ariel {
+        fixed-address {{ ipaddr.ariel }};
+        hardware ethernet {{ mac.ariel }};
+    }
+    host belle {
+        fixed-address {{ ipaddr.belle }};
+        hardware ethernet {{ mac.belle }};
+    }
+    host tinkerbell {
+        fixed-address {{ ipaddr.tinkerbell }};
+        hardware ethernet {{ mac.tinkerbell }};
+    }
+    host tinkerbell1 {
+        fixed-address {{ ipaddr.tinkerbell1 }};
+        hardware ethernet {{ mac.tinkerbell1 }};
+    }
+    host rapunzel {
+        fixed-address {{ ipaddr.rapunzel }};
+        hardware ethernet {{ mac.rapunzel }};
+    }
+    host rapunzel1 {
+        fixed-address {{ ipaddr.rapunzel1 }};
+        hardware ethernet {{ mac.rapunzel1 }};
+    }
+    host ps3 {
+        fixed-address {{ ipaddr.ps3 }};
+        hardware ethernet {{ mac.ps3 }};
+    }
+    host youview {
+        fixed-address {{ ipaddr.youview }};
+        hardware ethernet {{ mac.youview }};
+    }
+    host nighthawk {
+        fixed-address {{ ipaddr.nighthawk }};
+        hardware ethernet {{ mac.nighthawk }};
+    }
+    host harrier {
+        fixed-address {{ ipaddr.harrier }};
+        hardware ethernet {{ mac.harrier }};
+    }
+    host khanhs-phone {
+        fixed-address {{ ipaddr.khanhs-phone }};
+        hardware ethernet {{ mac.khanhs-phone }};
+    }
+    host katys-phone {
+        fixed-address {{ ipaddr.katys-phone }};
+        hardware ethernet {{ mac.katys-phone }};
+    }
+
+}

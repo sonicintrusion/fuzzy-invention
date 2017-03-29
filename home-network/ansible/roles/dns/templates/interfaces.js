@@ -1,0 +1,18 @@
+auto lo
+iface lo inet loopback
+
+iface eth0 inet dhcp
+iface eth0 inet static
+        address {{ alias.dns }}
+        netmask 255.255.255.0
+        network 192.168.1.0
+        gateway {{ alias.router }}
+        broadcast 192.168.1.255
+        dns-nameservers localhost
+        dns-search lan local home
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+
+iface default inet dhcp

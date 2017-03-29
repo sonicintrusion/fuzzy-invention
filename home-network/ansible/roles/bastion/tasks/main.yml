@@ -1,0 +1,12 @@
+---
+- name: deploy ssh key
+  copy:
+    src: "{{ item }}"
+    dest: /home/pi/.ssh/
+    owner: pi
+    group: pi
+    mode: 0600
+  with_fileglob:
+    - ".ssh/*"
+  become: yes
+  become_method: sudo

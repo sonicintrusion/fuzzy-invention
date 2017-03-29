@@ -1,0 +1,9 @@
+$TTL 3D
+@ IN SOA ns.home. admin.home. (
+  2007062001
+  28800
+  604800
+  604800
+  86400
+)
+	IN	NS	ns.home.

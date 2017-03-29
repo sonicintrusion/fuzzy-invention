@@ -1,0 +1,14 @@
+---
+- name: download pi-hole
+  get_url:
+    url: https://install.pi-hole.net
+    dest: /tmp/basic-install.sh
+    mode: 0777
+
+- name: install pi-hole
+  command: /tmp/basic-install.sh
+  args:
+    chdir: /tmp/
+    creates: /usr/local/bin/pihole
+
+# more required here

@@ -1,0 +1,22 @@
+$TTL 3D
+$ORIGIN home.
+@ IN SOA ns.home. admin.home. (
+  2012122701
+  28800
+  3600
+  604800
+  38400
+);
+    IN    NS    {{ alias.ns }}.home.
+
+ariel  IN  A   {{ ipaddr.ariel }}
+elsa    IN    A    {{ ipaddr.elsa }}
+belle    IN    A    {{ ipaddr.belle }}
+tinkerbell    IN    A    {{ ipaddr.tinkerbell }}
+tinkerbell1    IN    A    {{ ipaddr.tinkerbell1 }}
+rapunzel    IN    A    {{ ipaddr.rapunzel }}
+rapunzel1    IN    A    {{ ipaddr.rapunzel1 }}
+
+ns    IN    CNAME    {{ alias.ns }}.home
+ntp    IN    CNAME    {{ alias.ntp }}.home
+dhcp    IN    CNAME    {{ alias.dhcp }}.home

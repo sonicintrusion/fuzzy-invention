@@ -1,0 +1,8 @@
+---
+- hosts: tinkerbell
+  roles:
+    - common
+    - adblock
+    - vpn
+  become: true
+  become_method: sudo

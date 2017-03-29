@@ -1,0 +1,7 @@
+# Our domain zone
+
+zone "home" { type master; file "/etc/bind/zones/db.home"; };
+
+# For reverse DNS
+
+zone "1.168.192.in-addr.arpa" { type master; file "/etc/bind/zones/db.192"; };

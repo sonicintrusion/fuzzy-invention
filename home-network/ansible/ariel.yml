@@ -1,0 +1,9 @@
+---
+- hosts: ariel
+  roles:
+    - bastion
+    - ntp
+    - dns
+    - dhcp
+  become: true
+  become_method: sudo
