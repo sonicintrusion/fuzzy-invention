@@ -11,7 +11,7 @@
   notify:
     - restart dhcp
 
-- name: start dhcp service
+- name: start and enable dhcp service
   service:
     name: isc-dhcp-server
     state: started

@@ -10,8 +10,9 @@ options {
 	allow-query { goodclients; };
 
 	forwarders {
-		{{ alias.adblocker }};
         {{ alias.router }};
+		{{ isp.dn1 }}
+		{{ isp.dn2 }}
 	 };
 	forward only;
 
