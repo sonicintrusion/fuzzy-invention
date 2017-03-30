@@ -8,8 +8,6 @@
     mode: 0600
   with_fileglob:
     - ".ssh/*"
-  become: yes
-  become_method: sudo
 
 - name: install mosh
   apt:

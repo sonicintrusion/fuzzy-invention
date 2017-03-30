@@ -2,11 +2,12 @@
 
 ## Reqs
 
-1. Must copy the authorized_keys file into place
-2. Hostname must be set manually (for now)
-3. NTP server must be built first
-4. DHCP server needs to be built before the other regular servers
-5. DHCP server must have static IP address
+1. Must have a private key stored in the /.ssh/ directory
+1. Must copy the authorized_keys file into place on each server
+1. Hostname must be set manually (for now)
+1. NTP server must be built first
+1. DHCP server needs to be built before the other regular servers
+1. DHCP server must have static IP address
 
 ## Current status
 
