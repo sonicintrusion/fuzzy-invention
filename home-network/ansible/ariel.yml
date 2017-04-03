@@ -5,5 +5,6 @@
     - ntp
     - dns
     - dhcp
+    - vpn
   become: true
   become_method: sudo

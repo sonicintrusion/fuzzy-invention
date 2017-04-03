@@ -55,10 +55,10 @@
     regexp: '^PasswordAuthentication'
     line: 'PasswordAuthentication no'
 
-- name: disable PAM use for ssh login
+- name: ensure PAM is enabled 
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^UsePAM'
-    line: 'UsePAM no'
+    line: 'UsePAM yes'
   notify:
     - restart ssh

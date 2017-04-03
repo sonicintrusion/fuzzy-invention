@@ -10,9 +10,9 @@ options {
 	allow-query { goodclients; };
 
 	forwarders {
-        {{ alias.router }};
 		{{ isp.dn1 }}
 		{{ isp.dn2 }}
+		{{ alias.router }};
 	 };
 	forward only;
 

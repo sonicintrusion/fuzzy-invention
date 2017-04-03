@@ -38,6 +38,16 @@
   notify:
     - restart bind9
 
+- name: deploy adblocking files
+  copy:
+    src: dummy-block
+    dest: /etc/bind/zones/dummy-block
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+
 - name: set static IP address
   template:
     src: interfaces.j2
