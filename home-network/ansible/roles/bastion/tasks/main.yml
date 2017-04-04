@@ -13,7 +13,7 @@
   apt:
     name: mosh
     state: present
-  update_cache: yes
+    update_cache: yes
 
 - name: update firewall for mosh
   lineinfile:

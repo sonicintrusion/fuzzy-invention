@@ -18,24 +18,21 @@
 
 - name: wait for server to come back online
   local_action: 
-    - wait_for:
-        host: {{ ansible_ssh_host }}
-        state: started
-        port: 22
-        delay: 30
-        timeout: 300
-        connect_timeout: 15
+    module: wait_for
+        host={{ ansible_ssh_host }}
+        port=22
+        delay=30
+        timeout=300
+        connect_timeout=15
+
 
 - name: install vpn software
-  apt:
-    name: {{ items }}
-    state: present
-    with_items:
-      - openswan
-      - xl2tpd
-      - ppp
-      - lsof
-    update_cache: yes
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - openswan
+    - xl2tpd
+    - ppp
+    - lsof
 
 - name: configure sysctl.conf
   blockinfile: 
@@ -58,7 +55,7 @@
     backup: yes
     
 - name: configure redirects
-  command: {{ items }}
+  command: "{{ item }}"
   with_items:
    - "source /etc/rc.local"
    - "sysctl -p"
@@ -106,14 +103,14 @@
     insertafter: EOF
 
 - name: configure auto-start on boot
-  command: {{ items }}
+  command: "{{ item }}"
   with_items:
-    - "update-rc.d -f ipsec remove""
+    - "update-rc.d -f ipsec remove"
     - "update-rc.d ipsec defaults"
 
 - name: restart services
   service:
-    name: {{ items }}
+    name: "{{ item }}"
     state: restarted
   with_items:
     - xl2tpd

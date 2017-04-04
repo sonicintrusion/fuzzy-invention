@@ -1,10 +1,9 @@
 ---
 - name: Install Bind9
-  apt: name={{ item }} state=present
+  apt: name={{ item }} state=present update_cache=yes
   with_items:
     - bind9
     - bind9-doc
-  update_cache: yes
 
 - name: update options file
   template:
@@ -65,10 +64,9 @@
 
 - name: wait for server to come back online
   local_action: 
-    - wait_for:
-        host: {{ ansible_ssh_host | default(inventory_hostname) }}
-        state: started
-        port: 22
-        delay: 30
-        timeout: 300
-        connect_timeout: 15
+    module: wait_for
+        host={{ ansible_ssh_host }}
+        port=22
+        delay=30
+        timeout=300
+        connect_timeout=15
