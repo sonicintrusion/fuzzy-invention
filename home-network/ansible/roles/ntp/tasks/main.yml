@@ -3,7 +3,6 @@
   apt: 
     name: ntp
     state: present
-    update_cache: yes
 
 - name: update ntp.conf
   copy:
@@ -19,17 +18,18 @@
 
 - name: set firewall rules
   blockinfile:
-    path: /etc/rc.local
+    dest: /etc/rc.local
     block: |
+      # rules for NTP server
       iptables -A INPUT -p udp --dport 123 -j ACCEPT
       iptables -A OUTPUT -p udp --sport 123 -j ACCEPT
     insertbefore: "exit 0"
 
 - name: call new rc.local file
-  command: "source /etc/rc.local"
+  shell: ". /etc/rc.local"
 
 - name: start ntp service
   service: 
-    name: ntpd
+    name: ntp
     state: started
     enabled: true

@@ -9,6 +9,13 @@
   with_fileglob:
     - ".ssh/*"
 
+- name: set hostname
+  lineinfile:
+    dest: /etc/hostname
+    line: "{{ ansible_host }}"
+    insertbefore: BOF
+    #problem because it needs to replace the entry!!!
+
 - name: install mosh
   apt:
     name: mosh
@@ -16,10 +23,12 @@
     update_cache: yes
 
 - name: update firewall for mosh
-  lineinfile:
-    path: /etc/rc.local
-    line: "iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT"
+  blockinfile:
+    dest: /etc/rc.local
+    block: |
+      # rules for mosh
+      iptables -I INPUT 1 -p udp --dport 60000:61000 -j ACCEPT
     insertbefore: "exit 0"
 
 - name: apply settings from rc.local
-  command: "source /etc/rc.local"
+  shell: ". /etc/rc.local"

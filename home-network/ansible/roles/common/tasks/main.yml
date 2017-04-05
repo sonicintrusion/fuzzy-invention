@@ -3,9 +3,16 @@
   timezone:
     name: Europe/London
 
+- name: set hostname
+  lineinfile:
+    dest: /etc/hostname
+    line: "{{ ansible_host }}"
+    insertbefore: BOF
+    #problem here ****
+
 - name: install ntp
   apt: 
-    name: {{ items }}
+    name: "{{ items }}"
     state: present
     with_items:
       - ntp
@@ -21,14 +28,15 @@
 
 - name: set firewall rules
   blockinfile:
-    path: /etc/rc.local
+    dest: /etc/rc.local
     block: |
+      # rules for NTP update
       iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
       iptables -A INPUT -p udp --sport 123 -j ACCEPT
     insertbefore: "exit 0"
 
 - name: retrieve rc.local settings
-  command: "source /etc/rc.local"
+  shell: ". /etc/rc.local"
 
 - name: stop ntp service
   service:
@@ -45,19 +53,19 @@
 
 - name: disable challenge response for ssh login
   lineinfile:
-    path: /etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
     regexp: '^ChallengeResponseAuthentication'
     line: 'ChallengeResponseAuthentication no'
 
 - name: disable password authentication for ssh login
   lineinfile:
-    path: /etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
     regexp: '^PasswordAuthentication'
     line: 'PasswordAuthentication no'
 
 - name: ensure PAM is enabled 
   lineinfile:
-    path: /etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config
     regexp: '^UsePAM'
     line: 'UsePAM yes'
   notify:
