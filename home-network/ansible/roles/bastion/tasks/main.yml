@@ -9,13 +9,6 @@
   with_fileglob:
     - ".ssh/*"
 
-- name: set hostname
-  lineinfile:
-    dest: /etc/hostname
-    line: "{{ ansible_host }}"
-    insertbefore: BOF
-    #problem because it needs to replace the entry!!!
-
 - name: install mosh
   apt:
     name: mosh

@@ -1,8 +1,8 @@
 ---
 - name: Install Bind9
-  apt: 
+  apt:
     name: "{{ item }}"
-    state: present 
+    state: present
   with_items:
     - bind9
     - bind9-doc
@@ -49,7 +49,7 @@
     src: dummy-block
     dest: /etc/bind/zones/dummy-block
     owner: root
-    group: root
+    group: bind
     mode: 0644
     backup: yes
     force: yes
@@ -71,7 +71,7 @@
   ignore_errors: true
 
 - name: wait for server to come back online
-  local_action: 
+  local_action:
     module: wait_for
         host="{{ ansible_default_ipv4.address }}"
         port=22
